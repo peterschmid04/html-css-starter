@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" media="all" href="style.css">
+    <title>Tripsi</title>
+</head>
+<body>
+    <div class="gallery">
+      <div class="header">
+        <button data-category="all" class="category active">Show all</button>
+        <button data-category="nature" class="category">Nature</button>
+        <button data-category="hiking" class="category">Hiking</button>
+        <button data-category="traveling" class="category">Traveling</button>
+      </div>
+      <section class="image-grid" id="image-grid">
+        <div data-category="hiking nature"><img src="images/tent.jpg" alt="tent"><input class="title"></input><input></input></div>
+        <div data-category="nature"><img src="images/ landscape.jpg" alt="landscape"><input class="title"></input><input></input></div>
+        <div data-category="traveling"><img src="images/camper.jpg" alt="camper"><input class="title"></input><input></input></div>
+        <div data-category="hiking"><img src="images/hiking.jpg" alt="hiking"><input class="title"></input><input></input></div>
+        <div data-category="hiking"><img src="images/house.jpg" alt="house"><input class="title"></input><input></input></div>
+        <div data-category="hiking mountains"><img src="images/mountains.jpg" alt="mountains"><input class="title"></input><input></input></div>
+        <div data-category="nature"><img src="images/lake.jpg" alt="lake"><input class="title"></input><input></input></div>
+        <div data-category="traveling"><img src="images/traveling.jpg" alt="traveling"><input class="title"></input><input></input></div>
+      </section>
+    </div>
+
+    <script>
+      // JavaScript für das Toggeln der Buttons und Filtern der Bilder
+      const buttons = document.querySelectorAll(".category");
+      const imageGrid = document.getElementById("image-grid");
+      const images = document.querySelectorAll(".image-grid div");
+      
+      // Standardmäßig ist "Show all" aktiv
+      showAllImages();
+
+      buttons.forEach(button => {
+        button.addEventListener("click", () => {
+          // Entferne die active-Klasse von allen Buttons
+          buttons.forEach(btn => btn.classList.remove("active"));
+
+          // Füge die active-Klasse zum geklickten Button hinzu
+          button.classList.add("active");
+
+          // Filtere die Bilder basierend auf der ausgewählten Kategorie
+          const category = button.dataset.category;
+          if (category === "all") {
+            showAllImages();
+          } else {
+            filterImagesByCategory(category);
+          }
+        });
+      });
+
+      // Funktion, um alle Bilder anzuzeigen
+      function showAllImages() {
+        images.forEach(image => {
+          image.style.display = "grid";
+        });
+      }
+      
+      // Funktion, um Bilder basierend auf der Kategorie zu filtern
+      function filterImagesByCategory(category) {
+    images.forEach(image => {
+        const categories = image.dataset.category.trim().split(" "); // Trim und Split zur Sicherheit
+        if (categories.includes(category)) {
+            image.style.display = "grid";
+        } else {
+            image.style.display = "none";
+        }
+    });
+}
+    </script>
+</body>
+</html>
