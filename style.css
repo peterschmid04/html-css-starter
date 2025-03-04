@@ -82,7 +82,6 @@ body {
 
 .image-grid img {
   width: 100%;
-  max-height: max-content;
   object-fit: cover;
   overflow: hidden;
 }

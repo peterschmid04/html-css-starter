@@ -14,23 +14,71 @@
         <button data-category="hiking" class="category">Hiking</button>
         <button data-category="traveling" class="category">Traveling</button>
       </div>
+  
       <section class="image-grid" id="image-grid">
-        <div data-category="hiking nature"><img src="images/tent.jpg" alt="tent"><input class="title"></input><input></input></div>
-        <div data-category="nature"><img src="images/ landscape.jpg" alt="landscape"><input class="title"></input><input></input></div>
-        <div data-category="traveling"><img src="images/camper.jpg" alt="camper"><input class="title"></input><input></input></div>
-        <div data-category="hiking"><img src="images/hiking.jpg" alt="hiking"><input class="title"></input><input></input></div>
-        <div data-category="hiking"><img src="images/house.jpg" alt="house"><input class="title"></input><input></input></div>
-        <div data-category="hiking mountains"><img src="images/mountains.jpg" alt="mountains"><input class="title"></input><input></input></div>
-        <div data-category="nature"><img src="images/lake.jpg" alt="lake"><input class="title"></input><input></input></div>
-        <div data-category="traveling"><img src="images/traveling.jpg" alt="traveling"><input class="title"></input><input></input></div>
-      </section>
+        <div data-category="hiking nature">
+            <img src="images/tent.jpg" alt="tent">
+            <input type="text" value="tent">
+            <input type="text" placeholder="Beschreibung ">
+        </div>
+        <div data-category="nature">
+            <img src="images/ landscape.jpg" alt="landscape">
+            <input type="text" value="landscape">
+            <input type="text" placeholder="Beschreibung ">
+        </div>
+        <div data-category="traveling">
+            <img src="images/camper.jpg" alt="camper">
+            <input type="text" value="camper">
+            <input type="text" placeholder="Beschreibung ">
+        </div>
+        <div data-category="hiking">
+            <img src="images/hiking.jpg" alt="hiking">
+            <input type="text" value="hiking">
+            <input type="text" placeholder="Beschreibung ">
+        </div>
+        <div data-category="hiking">
+            <img src="images/house.jpg" alt="house">
+            <input type="text" value="house">
+            <input type="text" placeholder="Beschreibung ">
+        </div>
+        <div data-category="hiking mountains">
+            <img src="images/mountains.jpg" alt="mountains">
+            <input type="text" value="mountains">
+            <input type="text" placeholder="Beschreibung ">
+        </div>
+        <div data-category="nature">
+            <img src="images/lake.jpg" alt="lake">
+            <input type="text" value="lake">
+            <input type="text" placeholder="Beschreibung ">
+        </div>
+        <div data-category="traveling">
+            <img src="images/traveling.jpg" alt="traveling">
+            <input type="text" value="traveling">
+            <input type="text" placeholder="Beschreibung ">
+        </div>
+    </section>
     </div>
+  
+    <dialog id="imageDialog">
+      <div class="dialog-content">
+          <img id="dialogImage" src="" alt="">
+          <input id="dialogTitle" type="text">
+          <input id="dialogDescription" type="text">
+          <button id="closeDialog">Close</button>
+      </div>
+  </dialog>
 
     <script>
       // JavaScript für das Toggeln der Buttons und Filtern der Bilder
       const buttons = document.querySelectorAll(".category");
       const imageGrid = document.getElementById("image-grid");
       const images = document.querySelectorAll(".image-grid div");
+
+      const dialog = document.getElementById("imageDialog");
+      const dialogImage = document.getElementById("dialogImage");
+      const dialogTitle = document.getElementById("dialogTitle");
+      const dialogDescription = document.getElementById("dialogDescription");
+      const closeDialog = document.getElementById("closeDialog");
       
       // Standardmäßig ist "Show all" aktiv
       showAllImages();
@@ -70,7 +118,28 @@
             image.style.display = "none";
         }
     });
-}
+
+    // Bild anklicken -> Dialog öffnen
+    images.forEach(imageDiv => {
+            imageDiv.addEventListener("click", () => {
+                const img = imageDiv.querySelector("img");
+                const title = imageDiv.querySelector("input[type='text']").value;
+                const description = imageDiv.querySelectorAll("input[type='text']")[1].value;
+
+                dialogImage.src = img.src;
+                dialogImage.alt = img.alt;
+                dialogTitle.value = title;
+                dialogDescription.value = description;
+
+                dialog.showModal();
+            });
+        });
+
+        // Dialog schließen
+        closeDialog.addEventListener("click", () => {
+            dialog.close();
+        }); 
+    }
     </script>
 </body>
 </html>
