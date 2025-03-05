@@ -111,3 +111,81 @@ body {
   width: 100%;
   height: 100%;
 }
+
+dialog {
+  border: none;
+  border-radius: 10px;
+  padding: 20px;
+  background: rgb(49, 49, 49);
+  text-align: center;
+  width: 50%;
+  height:  90%;
+  position: relative;
+  justify-self: center;
+  align-self: center;
+}
+
+.dialog-content {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-columns: auto, auto, auto;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+}
+
+.dialog-content img {
+  justify-self: center;
+  grid-column: span 2;
+  max-height: 650px;
+  width: 90%;
+  border-radius: 5px;
+  overflow: hidden;
+}
+
+.dialog-content input {
+  border: none;
+  border-radius: 3px;
+  justify-content: center;
+  background: rgb(31, 31, 31);
+  color: white;
+  padding: 3%;
+  font-size: large;
+
+}
+
+.dialog-content button {
+  padding: 10px 15px;
+  border: none;
+  background-color: #4CAF50;
+  color: white;
+  cursor: pointer;
+  border-radius: 5px;
+  font-size: 1rem;
+  transition: 0.3s;
+}
+
+
+#safeDialog {
+  width: 50%;
+
+  background-color: #45a049;
+}
+
+#safeDialog:hover {
+  background-color: #307935;
+}
+
+#closeDialog {
+  justify-self: end;
+  width: 50%;
+  background-color: #d9534f;
+}
+
+#closeDialog:hover {
+  background-color: #c9302c;
+}
+
+dialog::backdrop {
+  background: rgba(0, 0, 0, 0.6);
+}

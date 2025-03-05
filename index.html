@@ -65,81 +65,53 @@
           <input id="dialogTitle" type="text">
           <input id="dialogDescription" type="text">
           <button id="closeDialog">Close</button>
+          <button id="safeDialog">Safe</button>
       </div>
   </dialog>
 
-    <script>
-      // JavaScript für das Toggeln der Buttons und Filtern der Bilder
+  <script>
       const buttons = document.querySelectorAll(".category");
-      const imageGrid = document.getElementById("image-grid");
-      const images = document.querySelectorAll(".image-grid div");
-
+      const images = document.querySelectorAll(".image-grid div img"); // Nur Bilder auswählen!
       const dialog = document.getElementById("imageDialog");
       const dialogImage = document.getElementById("dialogImage");
       const dialogTitle = document.getElementById("dialogTitle");
       const dialogDescription = document.getElementById("dialogDescription");
       const closeDialog = document.getElementById("closeDialog");
-      
-      // Standardmäßig ist "Show all" aktiv
-      showAllImages();
 
+      // Filterfunktion für die Buttons
       buttons.forEach(button => {
-        button.addEventListener("click", () => {
-          // Entferne die active-Klasse von allen Buttons
-          buttons.forEach(btn => btn.classList.remove("active"));
+          button.addEventListener("click", () => {
+              buttons.forEach(btn => btn.classList.remove("active"));
+              button.classList.add("active");
 
-          // Füge die active-Klasse zum geklickten Button hinzu
-          button.classList.add("active");
-
-          // Filtere die Bilder basierend auf der ausgewählten Kategorie
-          const category = button.dataset.category;
-          if (category === "all") {
-            showAllImages();
-          } else {
-            filterImagesByCategory(category);
-          }
-        });
+              const category = button.dataset.category;
+              document.querySelectorAll(".image-grid div").forEach(imageDiv => {
+                  const categories = imageDiv.dataset.category.split(" ");
+                  imageDiv.style.display = (category === "all" || categories.includes(category)) ? "grid" : "none";
+              });
+          });
       });
 
-      // Funktion, um alle Bilder anzuzeigen
-      function showAllImages() {
-        images.forEach(image => {
-          image.style.display = "grid";
-        });
-      }
-      
-      // Funktion, um Bilder basierend auf der Kategorie zu filtern
-      function filterImagesByCategory(category) {
-    images.forEach(image => {
-        const categories = image.dataset.category.trim().split(" "); // Trim und Split zur Sicherheit
-        if (categories.includes(category)) {
-            image.style.display = "grid";
-        } else {
-            image.style.display = "none";
-        }
-    });
+      // Bild anklicken -> Dialog öffnen (nur Bilder, keine Input-Felder)
+      images.forEach(img => {
+          img.addEventListener("click", (event) => {
+              const imageDiv = event.target.closest("div");
+              const title = imageDiv.querySelector("input[type='text']").value;
+              const description = imageDiv.querySelectorAll("input[type='text']")[1].value;
 
-    // Bild anklicken -> Dialog öffnen
-    images.forEach(imageDiv => {
-            imageDiv.addEventListener("click", () => {
-                const img = imageDiv.querySelector("img");
-                const title = imageDiv.querySelector("input[type='text']").value;
-                const description = imageDiv.querySelectorAll("input[type='text']")[1].value;
+              dialogImage.src = img.src;
+              dialogImage.alt = img.alt;
+              dialogTitle.value = title;
+              dialogDescription.value = description;
 
-                dialogImage.src = img.src;
-                dialogImage.alt = img.alt;
-                dialogTitle.value = title;
-                dialogDescription.value = description;
+              dialog.showModal();
+          });
+      });
 
-                dialog.showModal();
-            });
-        });
-
-        // Dialog schließen
-        closeDialog.addEventListener("click", () => {
-            dialog.close();
-        }); 
-    }
-    </script>
+      // Dialog schließen
+      closeDialog.addEventListener("click", () => {
+          dialog.close();
+      });
+  </script>
 </body>
 </html>
