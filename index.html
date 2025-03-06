@@ -15,8 +15,19 @@
         <button data-category="traveling" class="category">Traveling</button>
       </div>
   
-      <section class="image-grid" id="image-grid">
-
+      <section class="gallery-grid" id="gallery">
+        <div class="card" data-category="hiking nature">
+            <div class="image-bg" style="background-image: url('images/tent.jpg');"></div>
+            <input class="title" type="text" value="tent">
+            <input class="description" type="text" placeholder="description ">
+        </div>
+         <div class="card" data-category="nature">
+            <div class="image-bg" style="background-image: url('images/ landscape.jpg');"></div>
+            <input class="title" type="text" value="landscape" placeholder="title">
+            <input class="description" type="text" placeholder="description ">
+        </div>
+    
+        <!-- 
         <div data-category="hiking nature">
             <img src="images/tent.jpg" alt="tent">
             <input class="title" type="text" value="tent">
@@ -56,8 +67,8 @@
             <img src="images/traveling.jpg" alt="traveling">
             <input class="title" type="text" value="traveling" placeholder="title">
             <input type="text" placeholder="description ">
-        </div>
-    </section>
+        </div>  -->
+      </section>
     </div>
   
     <dialog id="imageDialog">
@@ -71,16 +82,17 @@
   </dialog>
 
   <script>
-    const buttons = document.querySelectorAll(".category");
-    const images = document.querySelectorAll(".image-grid div img"); 
+    const buttons = document.querySelectorAll(".category"); // Filter-Buttons
+    const galleryContainer = document.querySelectorAll(".gallery-grid .card"); // Galeriekarten
     const dialog = document.getElementById("imageDialog");
     const dialogImage = document.getElementById("dialogImage");
     const dialogTitle = document.getElementById("dialogTitle");
     const dialogDescription = document.getElementById("dialogDescription");
     const closeDialog = document.getElementById("closeDialog");
-    const safeDialog = document.getElementById("safeDialog");
+    const saveDialog = document.getElementById("safeDialog");
 
     let currentImageDiv = null; // Aktuelles Bild-Container-Element speichern
+
 
     // Filterfunktion für die Buttons
     buttons.forEach(button => {
@@ -89,7 +101,7 @@
             button.classList.add("active");
 
             const category = button.dataset.category;
-            document.querySelectorAll(".image-grid div").forEach(imageDiv => {
+            document.querySelectorAll(".card").forEach(imageDiv => { //Die muss man noch umschreiben gallery-grid ist es nicht
                 const categories = imageDiv.dataset.category.split(" ");
                 imageDiv.style.display = (category === "all" || categories.includes(category)) ? "grid" : "none";
             });
@@ -97,16 +109,22 @@
     });
 
     // Bild anklicken -> Dialog öffnen
-    images.forEach(img => {
-        img.addEventListener("click", (event) => {
-            currentImageDiv = event.target.closest("div"); // Container speichern
-            const title = currentImageDiv.querySelector("input[type='text']").value;
-            const description = currentImageDiv.querySelectorAll("input[type='text']")[1].value;
+    galleryContainer.forEach(card  => {
+        const imageBg = card.querySelector(".image-bg");
 
-            dialogImage.src = img.src;
-            dialogImage.alt = img.alt;
-            dialogTitle.value = title;
-            dialogDescription.value = description;
+        imageBg.addEventListener("click", () => {
+            currentImageDiv = card; // Speichert das aktuell angeklickte Card-Element
+            const title = currentImageDiv.querySelector(".title").value;
+            const description = currentImageDiv.querySelector(".description").value;
+
+            const imageUrl = imageBg.style.backgroundImage.replace('url("', '').replace('")', '');
+
+            // Hintergrundbild und Daten in den Dialog setzen
+                   // Setze das Bild im Dialog
+        dialogImage.src = imageUrl;
+        dialogImage.alt = title;
+        dialogTitle.value = title;
+        dialogDescription.value = description;
 
             dialog.showModal();
         });
