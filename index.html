@@ -16,45 +16,46 @@
       </div>
   
       <section class="image-grid" id="image-grid">
+
         <div data-category="hiking nature">
             <img src="images/tent.jpg" alt="tent">
-            <input type="text" value="tent">
-            <input type="text" placeholder="Beschreibung ">
+            <input class="title" type="text" value="tent">
+            <input type="text" placeholder="description ">
         </div>
         <div data-category="nature">
             <img src="images/ landscape.jpg" alt="landscape">
-            <input type="text" value="landscape">
-            <input type="text" placeholder="Beschreibung ">
+            <input class="title" type="text" value="landscape" placeholder="title">
+            <input type="text" placeholder="description ">
         </div>
         <div data-category="traveling">
             <img src="images/camper.jpg" alt="camper">
-            <input type="text" value="camper">
-            <input type="text" placeholder="Beschreibung ">
+            <input class="title" type="text" value="camper" placeholder="title">
+            <input type="text" placeholder="description ">
         </div>
         <div data-category="hiking">
             <img src="images/hiking.jpg" alt="hiking">
-            <input type="text" value="hiking">
-            <input type="text" placeholder="Beschreibung ">
+            <input class="title" type="text" value="hiking" placeholder="title">
+            <input type="text" placeholder="description ">
         </div>
         <div data-category="hiking">
             <img src="images/house.jpg" alt="house">
-            <input type="text" value="house">
-            <input type="text" placeholder="Beschreibung ">
+            <input class="title" type="text" value="house" placeholder="title">
+            <input type="text" placeholder="description ">
         </div>
         <div data-category="hiking mountains">
             <img src="images/mountains.jpg" alt="mountains">
-            <input type="text" value="mountains">
-            <input type="text" placeholder="Beschreibung ">
+            <input class="title" type="text" value="mountains" placeholder="title">
+            <input type="text" placeholder="description ">
         </div>
         <div data-category="nature">
             <img src="images/lake.jpg" alt="lake">
-            <input type="text" value="lake">
-            <input type="text" placeholder="Beschreibung ">
+            <input class="title" type="text" value="lake" placeholder="title">
+            <input type="text" placeholder="description ">
         </div>
         <div data-category="traveling">
             <img src="images/traveling.jpg" alt="traveling">
-            <input type="text" value="traveling">
-            <input type="text" placeholder="Beschreibung ">
+            <input class="title" type="text" value="traveling" placeholder="title">
+            <input type="text" placeholder="description ">
         </div>
     </section>
     </div>
@@ -62,56 +63,72 @@
     <dialog id="imageDialog">
       <div class="dialog-content">
           <img id="dialogImage" src="" alt="">
-          <input id="dialogTitle" type="text">
-          <input id="dialogDescription" type="text">
+          <input id="dialogTitle" type="text" placeholder="title">
+          <input id="dialogDescription" type="text" placeholder="description ">
           <button id="closeDialog">Close</button>
           <button id="safeDialog">Safe</button>
       </div>
   </dialog>
 
   <script>
-      const buttons = document.querySelectorAll(".category");
-      const images = document.querySelectorAll(".image-grid div img"); // Nur Bilder auswählen!
-      const dialog = document.getElementById("imageDialog");
-      const dialogImage = document.getElementById("dialogImage");
-      const dialogTitle = document.getElementById("dialogTitle");
-      const dialogDescription = document.getElementById("dialogDescription");
-      const closeDialog = document.getElementById("closeDialog");
+    const buttons = document.querySelectorAll(".category");
+    const images = document.querySelectorAll(".image-grid div img"); 
+    const dialog = document.getElementById("imageDialog");
+    const dialogImage = document.getElementById("dialogImage");
+    const dialogTitle = document.getElementById("dialogTitle");
+    const dialogDescription = document.getElementById("dialogDescription");
+    const closeDialog = document.getElementById("closeDialog");
+    const safeDialog = document.getElementById("safeDialog");
 
-      // Filterfunktion für die Buttons
-      buttons.forEach(button => {
-          button.addEventListener("click", () => {
-              buttons.forEach(btn => btn.classList.remove("active"));
-              button.classList.add("active");
+    let currentImageDiv = null; // Aktuelles Bild-Container-Element speichern
 
-              const category = button.dataset.category;
-              document.querySelectorAll(".image-grid div").forEach(imageDiv => {
-                  const categories = imageDiv.dataset.category.split(" ");
-                  imageDiv.style.display = (category === "all" || categories.includes(category)) ? "grid" : "none";
-              });
-          });
-      });
+    // Filterfunktion für die Buttons
+    buttons.forEach(button => {
+        button.addEventListener("click", () => {
+            buttons.forEach(btn => btn.classList.remove("active"));
+            button.classList.add("active");
 
-      // Bild anklicken -> Dialog öffnen (nur Bilder, keine Input-Felder)
-      images.forEach(img => {
-          img.addEventListener("click", (event) => {
-              const imageDiv = event.target.closest("div");
-              const title = imageDiv.querySelector("input[type='text']").value;
-              const description = imageDiv.querySelectorAll("input[type='text']")[1].value;
+            const category = button.dataset.category;
+            document.querySelectorAll(".image-grid div").forEach(imageDiv => {
+                const categories = imageDiv.dataset.category.split(" ");
+                imageDiv.style.display = (category === "all" || categories.includes(category)) ? "grid" : "none";
+            });
+        });
+    });
 
-              dialogImage.src = img.src;
-              dialogImage.alt = img.alt;
-              dialogTitle.value = title;
-              dialogDescription.value = description;
+    // Bild anklicken -> Dialog öffnen
+    images.forEach(img => {
+        img.addEventListener("click", (event) => {
+            currentImageDiv = event.target.closest("div"); // Container speichern
+            const title = currentImageDiv.querySelector("input[type='text']").value;
+            const description = currentImageDiv.querySelectorAll("input[type='text']")[1].value;
 
-              dialog.showModal();
-          });
-      });
+            dialogImage.src = img.src;
+            dialogImage.alt = img.alt;
+            dialogTitle.value = title;
+            dialogDescription.value = description;
 
-      // Dialog schließen
-      closeDialog.addEventListener("click", () => {
-          dialog.close();
-      });
+            dialog.showModal();
+        });
+    });
+
+    // Dialog schließen
+    closeDialog.addEventListener("click", () => {
+        dialog.close();
+    });
+
+    // Safe-Button: Werte speichern
+    safeDialog.addEventListener("click", () => {
+        if (currentImageDiv) {
+            const titleInput = currentImageDiv.querySelector(".title");
+            const descriptionInput = currentImageDiv.querySelectorAll("input[type='text']")[1];
+
+            titleInput.value = dialogTitle.value;
+            descriptionInput.value = dialogDescription.value;
+
+            dialog.close();
+        }
+    });
   </script>
 </body>
 </html>
