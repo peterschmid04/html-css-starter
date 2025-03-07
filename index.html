@@ -13,50 +13,11 @@
         <button data-category="nature" class="category">Nature</button>
         <button data-category="hiking" class="category">Hiking</button>
         <button data-category="traveling" class="category">Traveling</button>
+
+        <button class="addCardButton" id="addCardButton">+</button>
+
       </div>
-  
       <section class="gallery-grid" id="gallery">
-        <div class="card" data-category="hiking nature">
-            <div class="image-bg" style="background-image: url('images/tent.jpg');"></div>
-            <input class="title" type="text" value="tent">
-            <input class="description" type="text" placeholder="description">
-        </div>
-        <div class="card" data-category="nature">
-            <div class="image-bg" style="background-image: url('images/\ landscape.jpg');"></div>
-            <input class="title" type="text" value="landscape" placeholder="title">
-            <input class="description" type="text" placeholder="description">
-        </div>
-        <div class="card" data-category="traveling">
-            <div class="image-bg" style="background-image: url('images/camper.jpg');"></div>
-            <input class="title" type="text" value="camper" placeholder="title">
-            <input class="description" type="text" placeholder="description">
-        </div>
-        <div class="card" data-category="hiking">
-            <div class="image-bg" style="background-image: url('images/hiking.jpg');"></div>
-            <input class="title" type="text" value="hiking" placeholder="title">
-            <input class="description" type="text" placeholder="description">
-        </div>
-        <div class="card" data-category="hiking">
-            <div class="image-bg" style="background-image: url('images/house.jpg');"></div>
-            <input class="title" type="text" value="house" placeholder="title">
-            <input class="description" type="text" placeholder="description">
-        </div>
-        <div class="card" data-category="hiking mountains">
-            <div class="image-bg" style="background-image: url('images/mountains.jpg');"></div>
-            <input class="title" type="text" value="mountains" placeholder="title">
-            <input class="description" type="text" placeholder="description">
-        </div>
-        <div class="card" data-category="nature">
-            <div class="image-bg" style="background-image: url('images/lake.jpg');"></div>
-            <input class="title" type="text" value="lake" placeholder="title">
-            <input class="description" type="text" placeholder="description">
-        </div>
-        <div class="card" data-category="traveling">
-            <div class="image-bg" style="background-image: url('images/traveling.jpg');"></div>
-            <input class="title" type="text" value="traveling" placeholder="title">
-            <input class="description" type="text" placeholder="description">
-        </div>
-      </section>
 
     </div>
   
@@ -68,9 +29,36 @@
           <button id="closeDialog">Close</button>
           <button id="safeDialog">Safe</button>
       </div>
-  </dialog>
+    </dialog>
 
   <script>
+    const images = [
+        { title: "tent", category: "hiking nature", imageUrl: "images/tent.jpg" },
+        { title: "landscape", category: "nature", imageUrl: "images/ landscape.jpg" },
+        { title: "camper", category: "traveling", imageUrl: "images/camper.jpg" },
+        { title: "hiking", category: "hisking", imageUrl: "images/hiking.jpg" },
+        { title: "house", category: "hiking", imageUrl: "images/house.jpg" },
+        { title: "mountains", category: "hiking mountains", imageUrl: "images/mountains.jpg" },
+        { title: "lake", category: "nature", imageUrl: "images/lake.jpg" },
+        { title: "traveling", category: "traveling", imageUrl: "images/traveling.jpg" }
+    ];  
+
+    const gallery = document.getElementById("gallery");
+
+    images.forEach(image => {
+        const card = document.createElement("div");
+        card.className = "card";
+        card.dataset.category = image.category;
+
+        card.innerHTML = `
+            <div class="image-bg" style="background-image: url('${image.imageUrl}');"></div>
+            <input class="title" type="text" value="${image.title}" placeholder="title">
+            <input class="description" type="text" placeholder="description">
+        `;
+
+        gallery.appendChild(card);
+    });
+
     const buttons = document.querySelectorAll(".category"); // Filter-Buttons
     const galleryContainer = document.querySelectorAll(".gallery-grid .card"); // Galeriekarten
     const dialog = document.getElementById("imageDialog");
@@ -79,6 +67,7 @@
     const dialogDescription = document.getElementById("dialogDescription");
     const closeDialog = document.getElementById("closeDialog");
     const saveDialog = document.getElementById("safeDialog");
+    const addCardButton = document.getElementById("addCardButton");
 
     let currentImageDiv = null; // Aktuelles Bild-Container-Element speichern
 
@@ -95,6 +84,61 @@
             imageDiv.style.display = (category === "all" || categories.includes(category)) ? "grid" : "none";
         });
     });
+});
+
+addCardButton.addEventListener("click", () => {
+    // Leeren Dialog öffnen, um eine neue Karte zu erstellen
+    currentImageDiv = null; // Setzt das aktuelle Bild auf null für neuen Eintrag
+    dialogImage.src = "";
+    dialogImage.alt = "";
+    dialogTitle.value = "";
+    dialogDescription.value = "";
+    dialog.showModal();
+});
+
+// Safe-Button: Neue Karte hinzufügen oder bestehende Karte aktualisieren
+safeDialog.addEventListener("click", () => {
+    if (currentImageDiv) {
+        // Bestehende Karte aktualisieren
+        const titleInput = currentImageDiv.querySelector(".title");
+        const descriptionInput = currentImageDiv.querySelectorAll("input[type='text']")[1];
+
+        titleInput.value = dialogTitle.value;
+        descriptionInput.value = dialogDescription.value;
+
+    } else {
+        // Neue Karte erstellen
+        const newCard = document.createElement("div");
+        newCard.className = "card";
+        newCard.dataset.category = "new"; // Standardkategorie oder anpassbar
+
+        newCard.innerHTML = `
+            <div class="image-bg" style="background-image: url('images/placeholder.jpg');"></div>
+            <input class="title" type="text" value="${dialogTitle.value}" placeholder="title">
+            <input class="description" type="text" placeholder="description" value="${dialogDescription.value}">
+        `;
+
+        // Neue Karte in die Galerie einfügen
+        gallery.appendChild(newCard);
+        
+        // Klick-Event für neue Karte hinzufügen
+        newCard.querySelector(".image-bg").addEventListener("click", () => {
+            currentImageDiv = newCard;
+            const title = newCard.querySelector(".title").value;
+            const description = newCard.querySelector(".description").value;
+
+            const imageUrl = newCard.querySelector(".image-bg").style.backgroundImage.replace('url("', '').replace('")', '');
+
+            dialogImage.src = imageUrl;
+            dialogImage.alt = title;
+            dialogTitle.value = title;
+            dialogDescription.value = description;
+
+            dialog.showModal();
+        });
+    }
+
+    dialog.close();
 });
 
     // Bild anklicken -> Dialog öffnen
