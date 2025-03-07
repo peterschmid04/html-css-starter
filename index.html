@@ -19,56 +19,45 @@
         <div class="card" data-category="hiking nature">
             <div class="image-bg" style="background-image: url('images/tent.jpg');"></div>
             <input class="title" type="text" value="tent">
-            <input class="description" type="text" placeholder="description ">
+            <input class="description" type="text" placeholder="description">
         </div>
-         <div class="card" data-category="nature">
-            <div class="image-bg" style="background-image: url('images/ landscape.jpg');"></div>
+        <div class="card" data-category="nature">
+            <div class="image-bg" style="background-image: url('images/\ landscape.jpg');"></div>
             <input class="title" type="text" value="landscape" placeholder="title">
-            <input class="description" type="text" placeholder="description ">
+            <input class="description" type="text" placeholder="description">
         </div>
-    
-        <!-- 
-        <div data-category="hiking nature">
-            <img src="images/tent.jpg" alt="tent">
-            <input class="title" type="text" value="tent">
-            <input type="text" placeholder="description ">
-        </div>
-        <div data-category="nature">
-            <img src="images/ landscape.jpg" alt="landscape">
-            <input class="title" type="text" value="landscape" placeholder="title">
-            <input type="text" placeholder="description ">
-        </div>
-        <div data-category="traveling">
-            <img src="images/camper.jpg" alt="camper">
+        <div class="card" data-category="traveling">
+            <div class="image-bg" style="background-image: url('images/camper.jpg');"></div>
             <input class="title" type="text" value="camper" placeholder="title">
-            <input type="text" placeholder="description ">
+            <input class="description" type="text" placeholder="description">
         </div>
-        <div data-category="hiking">
-            <img src="images/hiking.jpg" alt="hiking">
+        <div class="card" data-category="hiking">
+            <div class="image-bg" style="background-image: url('images/hiking.jpg');"></div>
             <input class="title" type="text" value="hiking" placeholder="title">
-            <input type="text" placeholder="description ">
+            <input class="description" type="text" placeholder="description">
         </div>
-        <div data-category="hiking">
-            <img src="images/house.jpg" alt="house">
+        <div class="card" data-category="hiking">
+            <div class="image-bg" style="background-image: url('images/house.jpg');"></div>
             <input class="title" type="text" value="house" placeholder="title">
-            <input type="text" placeholder="description ">
+            <input class="description" type="text" placeholder="description">
         </div>
-        <div data-category="hiking mountains">
-            <img src="images/mountains.jpg" alt="mountains">
+        <div class="card" data-category="hiking mountains">
+            <div class="image-bg" style="background-image: url('images/mountains.jpg');"></div>
             <input class="title" type="text" value="mountains" placeholder="title">
-            <input type="text" placeholder="description ">
+            <input class="description" type="text" placeholder="description">
         </div>
-        <div data-category="nature">
-            <img src="images/lake.jpg" alt="lake">
+        <div class="card" data-category="nature">
+            <div class="image-bg" style="background-image: url('images/lake.jpg');"></div>
             <input class="title" type="text" value="lake" placeholder="title">
-            <input type="text" placeholder="description ">
+            <input class="description" type="text" placeholder="description">
         </div>
-        <div data-category="traveling">
-            <img src="images/traveling.jpg" alt="traveling">
+        <div class="card" data-category="traveling">
+            <div class="image-bg" style="background-image: url('images/traveling.jpg');"></div>
             <input class="title" type="text" value="traveling" placeholder="title">
-            <input type="text" placeholder="description ">
-        </div>  -->
+            <input class="description" type="text" placeholder="description">
+        </div>
       </section>
+
     </div>
   
     <dialog id="imageDialog">
@@ -96,17 +85,17 @@
 
     // Filterfunktion für die Buttons
     buttons.forEach(button => {
-        button.addEventListener("click", () => {
-            buttons.forEach(btn => btn.classList.remove("active"));
-            button.classList.add("active");
+    button.addEventListener("click", () => {
+        buttons.forEach(btn => btn.classList.remove("active"));
+        button.classList.add("active");
 
-            const category = button.dataset.category;
-            document.querySelectorAll(".card").forEach(imageDiv => { //Die muss man noch umschreiben gallery-grid ist es nicht
-                const categories = imageDiv.dataset.category.split(" ");
-                imageDiv.style.display = (category === "all" || categories.includes(category)) ? "grid" : "none";
-            });
+        const category = button.dataset.category;
+        document.querySelectorAll(".gallery-grid .card").forEach(imageDiv => { 
+            const categories = imageDiv.dataset.category.split(" ");
+            imageDiv.style.display = (category === "all" || categories.includes(category)) ? "grid" : "none";
         });
     });
+});
 
     // Bild anklicken -> Dialog öffnen
     galleryContainer.forEach(card  => {

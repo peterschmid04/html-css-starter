@@ -64,8 +64,8 @@ body {
   grid-template-columns: repeat(4, 1fr);
   grid-template-rows: repeat(2, 1fr);
   gap: 10px;
-  height: 100%;
-  width: 85vw;
+  height: 100%;  /*größen noch sinnvoll anpassen*/
+  width: 85vw;    /*größen noch sinnvoll anpassen*/
   background-color: #f1f1f1;
 
 }
@@ -75,10 +75,12 @@ body {
   grid-template-rows: auto, auto, auto;
   border-radius: 5%;
   overflow: hidden;
+  margin-bottom: 30px;
+
 }
 
 .image-bg {
-  height: 230px;  /* höhe und breite noch sinnvoll mit % angeben*/
+  height: 210px;  /* höhe und breite noch sinnvoll mit % angeben*/
   
   object-fit: cover;
   overflow: hidden;
