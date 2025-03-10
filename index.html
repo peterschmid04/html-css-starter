@@ -26,160 +26,121 @@
           <img id="dialogImage" src="" alt="">
           <input id="dialogTitle" type="text" placeholder="title">
           <input id="dialogDescription" type="text" placeholder="description ">
+          <input id="dialogURL" type="text" placeholder="Image-Url">
+          <input id="dialogCategories" type="text" placeholder="Categories natur/hiking/traveling ">
           <button id="closeDialog">Close</button>
           <button id="safeDialog">Safe</button>
       </div>
     </dialog>
 
-  <script>
-    const images = [
-        { title: "tent", category: "hiking nature", imageUrl: "images/tent.jpg" },
-        { title: "landscape", category: "nature", imageUrl: "images/ landscape.jpg" },
-        { title: "camper", category: "traveling", imageUrl: "images/camper.jpg" },
-        { title: "hiking", category: "hisking", imageUrl: "images/hiking.jpg" },
-        { title: "house", category: "hiking", imageUrl: "images/house.jpg" },
-        { title: "mountains", category: "hiking mountains", imageUrl: "images/mountains.jpg" },
-        { title: "lake", category: "nature", imageUrl: "images/lake.jpg" },
-        { title: "traveling", category: "traveling", imageUrl: "images/traveling.jpg" }
-    ];  
-
-    const gallery = document.getElementById("gallery");
-
-    images.forEach(image => {
-        const card = document.createElement("div");
-        card.className = "card";
-        card.dataset.category = image.category;
-
-        card.innerHTML = `
-            <div class="image-bg" style="background-image: url('${image.imageUrl}');"></div>
-            <input class="title" type="text" value="${image.title}" placeholder="title">
-            <input class="description" type="text" placeholder="description">
-        `;
-
-        gallery.appendChild(card);
-    });
-
-    const buttons = document.querySelectorAll(".category"); // Filter-Buttons
-    const galleryContainer = document.querySelectorAll(".gallery-grid .card"); // Galeriekarten
-    const dialog = document.getElementById("imageDialog");
-    const dialogImage = document.getElementById("dialogImage");
-    const dialogTitle = document.getElementById("dialogTitle");
-    const dialogDescription = document.getElementById("dialogDescription");
-    const closeDialog = document.getElementById("closeDialog");
-    const saveDialog = document.getElementById("safeDialog");
-    const addCardButton = document.getElementById("addCardButton");
-
-    let currentImageDiv = null; // Aktuelles Bild-Container-Element speichern
-
-
-    // Filterfunktion für die Buttons
-    buttons.forEach(button => {
-    button.addEventListener("click", () => {
-        buttons.forEach(btn => btn.classList.remove("active"));
-        button.classList.add("active");
-
-        const category = button.dataset.category;
-        document.querySelectorAll(".gallery-grid .card").forEach(imageDiv => { 
-            const categories = imageDiv.dataset.category.split(" ");
-            imageDiv.style.display = (category === "all" || categories.includes(category)) ? "grid" : "none";
-        });
-    });
-});
-
-addCardButton.addEventListener("click", () => {
-    // Leeren Dialog öffnen, um eine neue Karte zu erstellen
-    currentImageDiv = null; // Setzt das aktuelle Bild auf null für neuen Eintrag
-    dialogImage.src = "";
-    dialogImage.alt = "";
-    dialogTitle.value = "";
-    dialogDescription.value = "";
-    dialog.showModal();
-});
-
-// Safe-Button: Neue Karte hinzufügen oder bestehende Karte aktualisieren
-safeDialog.addEventListener("click", () => {
-    if (currentImageDiv) {
-        // Bestehende Karte aktualisieren
-        const titleInput = currentImageDiv.querySelector(".title");
-        const descriptionInput = currentImageDiv.querySelectorAll("input[type='text']")[1];
-
-        titleInput.value = dialogTitle.value;
-        descriptionInput.value = dialogDescription.value;
-
-    } else {
-        // Neue Karte erstellen
-        const newCard = document.createElement("div");
-        newCard.className = "card";
-        newCard.dataset.category = "new"; // Standardkategorie oder anpassbar
-
-        newCard.innerHTML = `
-            <div class="image-bg" style="background-image: url('images/placeholder.jpg');"></div>
-            <input class="title" type="text" value="${dialogTitle.value}" placeholder="title">
-            <input class="description" type="text" placeholder="description" value="${dialogDescription.value}">
-        `;
-
-        // Neue Karte in die Galerie einfügen
-        gallery.appendChild(newCard);
-        
-        // Klick-Event für neue Karte hinzufügen
-        newCard.querySelector(".image-bg").addEventListener("click", () => {
-            currentImageDiv = newCard;
-            const title = newCard.querySelector(".title").value;
-            const description = newCard.querySelector(".description").value;
-
-            const imageUrl = newCard.querySelector(".image-bg").style.backgroundImage.replace('url("', '').replace('")', '');
-
+    <script>
+        // Daten für die cards
+        const images = [
+            { title: "tent", category: "hiking nature", imageUrl: "images/tent.jpg" },
+            { title: "landscape", category: "nature", imageUrl: "images/ landscape.jpg" },
+            { title: "camper", category: "traveling", imageUrl: "images/camper.jpg" },
+            { title: "hiking", category: "hiking", imageUrl: "images/hiking.jpg" },
+            { title: "house", category: "hiking", imageUrl: "images/house.jpg" },
+            { title: "mountains", category: "hiking mountains", imageUrl: "images/mountains.jpg" },
+            { title: "lake", category: "nature", imageUrl: "images/lake.jpg" },
+            { title: "traveling", category: "traveling", imageUrl: "images/traveling.jpg" }
+        ];
+    
+        //  DOM-Elemente holen
+        const gallery = document.getElementById("gallery");
+        const buttons = document.querySelectorAll(".category");
+        const dialog = document.getElementById("imageDialog");
+        const dialogImage = document.getElementById("dialogImage");
+        const dialogTitle = document.getElementById("dialogTitle");
+        const dialogDescription = document.getElementById("dialogDescription");
+        const dialogURL = document.getElementById("dialogURL");
+        const dialogCategories = document.getElementById("dialogCategories");
+        const closeDialog = document.getElementById("closeDialog");
+        const saveDialog = document.getElementById("safeDialog");
+        const addCardButton = document.getElementById("addCardButton");
+    
+        let currentImageDiv = null;
+    
+        // Funktion zum Öffnen des Dialogs
+        function openDialog(card) {
+            currentImageDiv = card;
+            const title = card.querySelector(".title").value;
+            const description = card.querySelector(".description").value;
+            const imageUrl = card.querySelector(".image-bg").style.backgroundImage.replace('url("', '').replace('")', '');
+            const categories = card.dataset.category;
+            
             dialogImage.src = imageUrl;
             dialogImage.alt = title;
             dialogTitle.value = title;
             dialogDescription.value = description;
-
+            dialogURL.value = imageUrl;
+            dialogCategories.value = categories;
+    
             dialog.showModal();
-        });
-    }
-
-    dialog.close();
-});
-
-    // Bild anklicken -> Dialog öffnen
-    galleryContainer.forEach(card  => {
-        const imageBg = card.querySelector(".image-bg");
-
-        imageBg.addEventListener("click", () => {
-            currentImageDiv = card; // Speichert das aktuell angeklickte Card-Element
-            const title = currentImageDiv.querySelector(".title").value;
-            const description = currentImageDiv.querySelector(".description").value;
-
-            const imageUrl = imageBg.style.backgroundImage.replace('url("', '').replace('")', '');
-
-            // Hintergrundbild und Daten in den Dialog setzen
-                   // Setze das Bild im Dialog
-        dialogImage.src = imageUrl;
-        dialogImage.alt = title;
-        dialogTitle.value = title;
-        dialogDescription.value = description;
-
-            dialog.showModal();
-        });
-    });
-
-    // Dialog schließen
-    closeDialog.addEventListener("click", () => {
-        dialog.close();
-    });
-
-    // Safe-Button: Werte speichern
-    safeDialog.addEventListener("click", () => {
-        if (currentImageDiv) {
-            const titleInput = currentImageDiv.querySelector(".title");
-            const descriptionInput = currentImageDiv.querySelectorAll("input[type='text']")[1];
-
-            titleInput.value = dialogTitle.value;
-            descriptionInput.value = dialogDescription.value;
-
-            dialog.close();
         }
-    });
-  </script>
+    
+        // Funktion zum Erstellen einer neuen Card
+        function createCard(title, category, imageUrl, description = "") {
+            const newCard = document.createElement("div");
+            newCard.className = "card";
+            newCard.dataset.category = category || "new";
+    
+            newCard.innerHTML = `
+                <div class="image-bg" style="background-image: url('${imageUrl || 'images/placeholder.jpg'}');"></div>
+                <input class="title" type="text" value="${title}" placeholder="title">
+                <input class="description" type="text" placeholder="description" value="${description}">
+            `;
+    
+            // click-Event zur Card hinzufügen
+            newCard.querySelector(".image-bg").addEventListener("click", () => openDialog(newCard));
+    
+            gallery.appendChild(newCard);
+        }
+    
+        // Card aus der Datenliste erzeugen
+        images.forEach(image => createCard(image.title, image.category, image.imageUrl));
+    
+        // Filterfunktion für categories
+        buttons.forEach(button => {
+            button.addEventListener("click", () => {
+                buttons.forEach(btn => btn.classList.remove("active"));
+                button.classList.add("active");
+    
+                const category = button.dataset.category;
+                document.querySelectorAll(".gallery-grid .card").forEach(imageDiv => {
+                    const categories = imageDiv.dataset.category.split(" ");
+                    imageDiv.style.display = (category === "all" || categories.includes(category)) ? "grid" : "none";
+                });
+            });
+        });
+    
+        // Neue Card über Add-Button hinzufügen
+        addCardButton.addEventListener("click", () => {
+            currentImageDiv = null;
+            dialogImage.src = "";
+            dialogImage.alt = "";
+            dialogTitle.value = "";
+            dialogDescription.value = "";
+            dialogURL.value = "";
+            dialogCategories.value = "";
+            dialog.showModal();
+        });
+    
+        // Safe-Button: Werte speichern oder neue Karte anlegen
+        saveDialog.addEventListener("click", () => {
+            if (currentImageDiv) {
+                currentImageDiv.querySelector(".title").value = dialogTitle.value;
+                currentImageDiv.querySelector(".description").value = dialogDescription.value;
+                currentImageDiv.querySelector(".image-bg").style.backgroundImage = `url('${dialogURL.value}')`;
+                currentImageDiv.dataset.category = dialogCategories.value;
+            } else {
+                createCard(dialogTitle.value, dialogCategories.value, dialogURL.value, dialogDescription.value);
+            }
+            dialog.close();
+        });
+    
+        // Dialog schließen
+        closeDialog.addEventListener("click", () => dialog.close());
+    </script>
 </body>
 </html>
