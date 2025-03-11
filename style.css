@@ -119,18 +119,86 @@ body {
   height: 100%;
 }
 
+
+.description-container {
+  position: relative;
+  width: 100%;
+}
+
 .description {
-  display: grid;
-  justify-content: center;
-  padding-left: 15px;
-  padding-bottom: 15px;
+  width: 100%;
+  padding: 10px;
+  padding-right: 35px;
   border: none;
   background-color: white;
   color: rgb(0, 0, 0);
   font-size: large;
-  width: 100%;
-  height: 100%;
+  border-radius: 5px;
 }
+
+.desc-button {
+  position: absolute;
+  top: 50%;
+  right: 5px;
+  transform: translateY(-50%);
+  border: none;
+  background:  #6b757e;
+  color: white;
+  padding: 3px 5px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+#descriptionDialog {
+  display: none; /* Standardmäßig verborgen */
+}
+
+#descriptionDialog[open] {
+  display: flex; /* Nur anzeigen, wenn das Dialogfenster geöffnet ist */
+  flex-direction: column;
+  gap: 10px;
+  width: 40%;
+  height: auto;
+  padding: 20px;
+  border: none;
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.875);
+  text-align: center;
+}
+
+#descriptionDialog .dialog-content {
+  display: flex;
+  flex-direction: column; /* Stellt sicher, dass Elemente untereinander angeordnet sind */
+  gap: 10px; /* Abstand zwischen Eingabefeld und Button */
+  width: 100%;
+}
+
+#descriptionDialog textarea {
+  width: 100%;
+  height: 100px;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-size: 1rem;
+  margin-bottom: 10px;
+}
+
+#descriptionDialog button {
+  padding: 10px 15px;
+  border: none;
+  background-color: #4CAF50;
+  color: white;
+  cursor: pointer;
+  border-radius: 5px;
+  font-size: 1rem;
+  transition: 0.3s;
+  width: 100%;
+}
+
+#descriptionDialog button:hover {
+  background-color: #45a049;
+}
+
 
 dialog {
   border: none;

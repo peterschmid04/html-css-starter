@@ -27,11 +27,18 @@
           <input id="dialogTitle" type="text" placeholder="title">
           <input id="dialogDescription" type="text" placeholder="description ">
           <input id="dialogURL" type="text" placeholder="Image-Url">
-          <input id="dialogCategories" type="text" placeholder="Categories natur/hiking/traveling ">
+          <input id="dialogCategories" type="text" placeholder=" nature/hiking/traveling ">
           <button id="closeDialog">Close</button>
           <button id="safeDialog">Safe</button>
       </div>
     </dialog>
+
+    <dialog id="descriptionDialog">
+    <div class="dialog-content">
+        <textarea id="descriptionText" placeholder="description"></textarea>
+        <button id="saveDescription">Save</button>
+    </div>
+</dialog>
 
     <script>
         // Daten für die cards
@@ -59,6 +66,38 @@
         const saveDialog = document.getElementById("safeDialog");
         const addCardButton = document.getElementById("addCardButton");
     
+       // DOM-Elemente holen
+        const descriptionDialog = document.getElementById("descriptionDialog");
+        const descriptionText = document.getElementById("descriptionText");
+        const saveDescriptionButton = document.getElementById("saveDescription");
+
+        // Variable, um die aktuelle Karte zu speichern
+        let currentCardForDescription = null;
+
+        // Funktion zum Öffnen des Beschreibungs-Dialogs
+        function openDescriptionDialog(card) {
+            currentCardForDescription = card;
+            const description = card.querySelector(".description").value;
+            descriptionText.value = description; // Beschreibung in das Textfeld laden
+            descriptionDialog.showModal();
+        }
+
+        // Event-Listener für den Beschreibungs-Button in jeder Karte
+        document.addEventListener("click", function (event) {
+            if (event.target.classList.contains("desc-button")) {
+                const card = event.target.closest(".card");
+                openDescriptionDialog(card);
+            }
+        });
+
+        // Event-Listener für den "Save"-Button im Beschreibungs-Dialog
+        saveDescriptionButton.addEventListener("click", () => {
+            if (currentCardForDescription) {
+                currentCardForDescription.querySelector(".description").value = descriptionText.value;
+            }
+            descriptionDialog.close();
+        });
+
         let currentImageDiv = null;
     
         // Funktion zum Öffnen des Dialogs
@@ -81,22 +120,25 @@
     
         // Funktion zum Erstellen einer neuen Card
         function createCard(title, category, imageUrl, description = "") {
-            const newCard = document.createElement("div");
-            newCard.className = "card";
-            newCard.dataset.category = category || "new";
-    
-            newCard.innerHTML = `
-                <div class="image-bg" style="background-image: url('${imageUrl || 'images/placeholder.jpg'}');"></div>
-                <input class="title" type="text" value="${title}" placeholder="title">
+        const newCard = document.createElement("div");
+        newCard.className = "card";
+        newCard.dataset.category = category || "new";
+
+        newCard.innerHTML = `
+            <div class="image-bg" style="background-image: url('${imageUrl || 'images/placeholder.jpg'}');"></div>
+            <input class="title" type="text" value="${title}" placeholder="title">
+            <div class="description-container">
                 <input class="description" type="text" placeholder="description" value="${description}">
-            `;
-    
-            // click-Event zur Card hinzufügen
-            newCard.querySelector(".image-bg").addEventListener("click", () => openDialog(newCard));
-    
-            gallery.appendChild(newCard);
+                <button class="desc-button">Edit</button>
+            </div>
+        `;
+
+        // click-Event zur Card hinzufügen
+        newCard.querySelector(".image-bg").addEventListener("click", () => openDialog(newCard));
+
+        gallery.appendChild(newCard);
         }
-    
+        
         // Card aus der Datenliste erzeugen
         images.forEach(image => createCard(image.title, image.category, image.imageUrl));
     
